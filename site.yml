@@ -5,5 +5,11 @@
     - name: System Requirement
       include: tasks/system.yml
     - name: Drupal Installation
-      include: tasks/drupal-install.yml project={{ project }}
+      include: tasks/drupal-install.yml project={{ project }} project_url={{ project_url }}
 
+  ###################
+  # Handlers
+  ###################
+  handlers:
+    - name: restart apache2
+      service: name=apache2 state=restarted enabled=yes

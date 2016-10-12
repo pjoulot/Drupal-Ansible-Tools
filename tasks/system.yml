@@ -14,9 +14,10 @@
     - curl
     - build-essential
     - gcc
- ###################
- # REDIS
- ###################
+
+###################
+# REDIS
+###################
 - name: Install Redis-server
   apt: name=redis-server state=present
   when: redis-required is defined
@@ -27,6 +28,14 @@
 - name: Remove default site config
   file: path=/etc/apache2/sites-enabled/000-default.conf
         state=absent
+
+###################
+# Varnish
+###################
+- name: Install Redis-server
+  apt: name=varnish state=present
+  when: varnish_port is defined
+
 ###################
 # composer
 ###################

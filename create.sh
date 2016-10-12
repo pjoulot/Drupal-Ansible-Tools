@@ -40,6 +40,18 @@ if [ -z "$6" ]; then
     read -p "Enter the database user password (default: $DOMAIN) : " DRUPAL_DBPASS
 fi
 
+VARNISH_ENABLE=$7
+if [ -z "$7" ]; then
+    read -p "Do you want to activate Varnish? Y or N (default: yes)         : " VARNISH_ENABLE
+fi
+
+if [ "$VARNISH_ENABLE" == "N" || "$VARNISH_ENABLE" == "n" || "$VARNISH_ENABLE" == "no" ]; then
+    APACHE_PORT=80
+else
+    VARNISH_PORT=80
+    APACHE_PORT=81
+fi
+
 
 echo "LXC URL: $URL"
 #Deploy LXC with smile package and add it to ansible inventory to be managed
@@ -50,5 +62,5 @@ if [ ! -d "/lxc/$DOMAIN/root/.ssh" ]; then
   sudo touch "/lxc/$DOMAIN/root/.ssh/authorized_keys"
 fi
 sudo sh -c 'cat ~/.ssh/id_rsa.pub >> "/lxc/testscript/root/.ssh/authorized_keys"'
-ansible-playbook -i inventory/dev  site.yml --extra-vars "project=$DOMAIN project_url=$URL project_vhost=$VHOST gitpath=$GIT project_integ=test project_name=$PROJECT_NAME drupal_dbname=$DRUPAL_DBNAME drupal_dbuser=$DRUPAL_DBUSER drupal_dbpass=$DRUPAL_DBPASS"
+ansible-playbook -i inventory/dev  site.yml --extra-vars "project=$DOMAIN project_url=$URL project_vhost=$VHOST gitpath=$GIT project_integ=test project_name=$PROJECT_NAME drupal_dbname=$DRUPAL_DBNAME drupal_dbuser=$DRUPAL_DBUSER drupal_dbpass=$DRUPAL_DBPASS varnish_port=$VARNISH_PORT apache_port=$APACHE_PORT"
 

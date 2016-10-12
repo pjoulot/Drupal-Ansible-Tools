@@ -1,0 +1,37 @@
+##############################
+# Initialize Drupal project  #
+##############################
+- name: Create project directory
+  file: path=/home/smile/{{ project }} state=directory
+- name: Create conf directory
+  file: path=/home/smile/{{ project }}/conf state=directory
+- name: Create apache conf directory
+  file: path=/home/smile/{{ project }}/conf/apache state=directory
+
+- name: Setup apache config for our app
+  template: src=templates/drupal/conf/apache/project.conf dest=/home/smile/{{ project }}/conf/apache/{{ project_url }}.conf
+  notify: restart apache2
+
+- name: drupal sources folder
+  file: path=/home/smile/{{ project }}/conf/drupal state=directory
+
+- name: drupal default site folder
+  file: path=/home/smile/{{ project }}/conf/drupal/default state=directory
+
+- name: drupal drush folder
+  file: path=/home/smile/{{ project }}/conf/drupal/drush state=directory
+
+- name: default site settings
+  template: src=templates/drupal/conf/drupal/default/settings.local.php dest=/home/smile/{{ project }}/conf/drupal/default/settings.local.php
+
+- name: drush aliases
+  template: src=templates/drupal/conf/drupal/drush/aliases.drushrc.php dest=/home/smile/{{ project }}/conf/drupal/drush/aliases.drushrc.php
+
+- name: Source directory
+  file: path=/home/smile/{{ project }}/src/sites/all/modules/custom state=directory
+
+- name: Script directory
+  file: path=/home/smile/{{ project }}/scripts state=directory
+
+- name: env script
+  template: src=templates/drupal/scripts/env.sh dest=/home/smile/{{ project }}/scripts/env.sh

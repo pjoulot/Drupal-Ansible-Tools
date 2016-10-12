@@ -1,4 +1,12 @@
-- name: install drupal
-  shell: composer create-project drupal-composer/drupal-project:8.x-dev {{ project }}
+- name: Install drupal
+  shell: composer create-project drupal-composer/drupal-project:8.x-dev {{ project }} creates={{ project }}
   tags: composer
 
+- name: Move drupal to correct location
+  shell: mv {{ project }} /var/www/ creates=/var/www/{{ project }} creates=/var/www/{{ project }}
+
+- name: Initialize Drupal Project
+  include: tasks/init-project.yml project={{ project }}
+
+- name: Deploy Drupal Website
+  include: tasks/deploy-drupal.yml

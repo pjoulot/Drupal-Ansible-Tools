@@ -1,3 +1,1 @@
 testscript.lxc ansible_connection=ssh ansible_user=root
-testscript.lxc ansible_connection=ssh ansible_user=root
-testscript.lxc ansible_connection=ssh ansible_user=root

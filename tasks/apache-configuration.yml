@@ -1,0 +1,12 @@
+- name: Activate vhost
+  file: src=/home/smile/{{ project }}/conf/apache/{{ project_url }}.conf dest=/etc/apache2/sites-enabled/{{ project_url }}.conf state=link
+
+- name: Remove default site config
+  file: path=/etc/apache2/ports.conf
+        state=absent
+
+- name: Define apache ports
+  template: src=templates/drupal/conf/apache/ports.conf dest=/home/smile/{{ project }}/conf/apache/ports.conf
+
+- name: Link ports.conf file
+  file: src=/home/smile/{{ project }}/conf/apache/ports.conf dest=/etc/apache2/ports.conf state=link

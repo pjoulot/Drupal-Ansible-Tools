@@ -1,0 +1,33 @@
+- name: Define Apache ports
+  include: tasks/apache-configuration.yml apache_port={{ apache_port }}
+
+- name: drupal drush root folder
+  file: path=/root/.drush state=directory
+
+- name: drupal drush smile folder
+  file: path=/home/smile/.drush state=directory
+
+- name: Symlink alias root
+  file: src=/home/smile/{{ project }}/conf/drupal/drush/aliases.drushrc.php dest=/root/.drush/aliases.drushrc.php state=link
+
+- name: Symlink alias smile
+  file: src=/home/smile/{{ project }}/conf/drupal/drush/aliases.drushrc.php dest=/home/smile/.drush/aliases.drushrc.php state=link
+
+#- name: Add exectution rights
+#  file: path=/home/smile/{{ project }}/scripts/build.sh mode=0774
+
+#- name: launch rebuild-lxc
+#  command: /home/smile/{{ project }}/scripts/build.sh
+
+#- name: install website
+#  command: drush @dev  site-install minimal --db-su="root" --db-su-pw="" --account-name=admin --account-pass=admin --db-url=mysql://{{ project }}:{{ project }}@localhost:3306/{{ project }} --sites-subdir={{ project }} -y
+
+- name: Remove default site config setting
+  file: path=/var/www/{{ project }}/web/sites/local.settings.php
+            state=absent 
+
+- name: Symlink settings drupal
+  file: src=/home/smile/{{ project }}/conf/drupal/default/settings.local.php dest=/var/www/{{ project }}/web/sites/default/settings.local.php state=link
+
+#- name: Symlink sites drupal
+#  file: src=/home/smile/{{ project }}/conf/drupal/sites.php dest=/var/www/html/{{ project }}/sites/sites.php state=link
