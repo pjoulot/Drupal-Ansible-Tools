@@ -1,0 +1,9 @@
+---
+- hosts: "{{ project }}.lxc"
+  remote_user: root
+  tasks:
+    - name: System Requirement
+      include: tasks/system.yml
+    - name: Drupal Installation
+      include: tasks/drupal-install.yml project={{ project }}
+
