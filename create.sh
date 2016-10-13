@@ -45,7 +45,7 @@ if [ -z "$7" ]; then
     read -p "Do you want to install Varnish? Y or N (default: yes): " VARNISH_ENABLE
 fi
 
-if [ "$VARNISH_ENABLE" == "N" || "$VARNISH_ENABLE" == "n" || "$VARNISH_ENABLE" == "no" ]; then
+if [ "$VARNISH_ENABLE" == "N" ] || [ "$VARNISH_ENABLE" == "n" ] || [ "$VARNISH_ENABLE" == "no" ]; then
     APACHE_PORT=80
 else
     VARNISH_PORT=80
