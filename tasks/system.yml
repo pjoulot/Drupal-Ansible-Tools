@@ -32,16 +32,26 @@
 ###################
 # Varnish
 ###################
-- name: Install Redis-server
+- name: Install Varnish
   apt: name=varnish state=present
   when: varnish_port is defined
 
 ###################
 # composer
 ###################
-- name: install composer
-  shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin creates=/usr/local/bin/composer
+- name: download composer
+  get_url: 
+    url: "https://getcomposer.org/installer"
+    dest: "/root"
   tags: composer
+
+- name: install composer
+  shell: cat installer | php -- --install-dir=/usr/local/bin creates=/usr/local/bin/composer
+  tags: composer
+
+- name: Delete installer
+  file: path=installer
+        state=absent
 
 # Install composer globally
 - name: rename composer.phar to composer

@@ -5,7 +5,7 @@
     - name: System Requirement
       include: tasks/system.yml
     - name: Drupal Installation
-      include: tasks/drupal-install.yml project={{ project }} project_url={{ project_url }}
+      include: tasks/drupal-install.yml project={{ project }} project_url={{ project_url }} drupal_profile={{ drupal_profile }}
 
   ###################
   # Handlers

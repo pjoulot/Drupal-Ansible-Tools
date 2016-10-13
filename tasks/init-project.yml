@@ -11,9 +11,16 @@
   file: path=/home/smile/{{ project }}/conf/varnish state=directory
 - name: Create php conf directory
   file: path=/home/smile/{{ project }}/conf/php state=directory
+- name: Create php/cli conf directory
+  file: path=/home/smile/{{ project }}/conf/php/cli state=directory
+- name: Create php/apache2 conf directory
+  file: path=/home/smile/{{ project }}/conf/php/apache2 state=directory
 
-- name: Setup php for our app
-  template: src=templates/drupal/conf/php/php.ini dest=/home/smile/{{ project }}/conf/php/php.ini
+- name: Setup php cli for our app
+  template: src=templates/drupal/conf/php/cli/php.ini dest=/home/smile/{{ project }}/conf/php/cli/php.ini
+
+- name: Setup php apache2 for our app
+  template: src=templates/drupal/conf/php/apache2/php.ini dest=/home/smile/{{ project }}/conf/php/apache2/php.ini
 
 - name: Setup apache config for our app
   template: src=templates/drupal/conf/apache/project.conf dest=/home/smile/{{ project }}/conf/apache/{{ project_url }}.conf
@@ -45,8 +52,20 @@
 - name: Script directory
   file: path=/home/smile/{{ project }}/scripts state=directory
 
+- name: drupal data folder
+  file: path=/home/smile/{{ project }}/data state=directory
+
+- name: drupal files folder
+  file: path=/home/smile/{{ project }}/data/files state=directory
+
+- name: drupal translations folder
+  file: path=/home/smile/{{ project }}/data/files/translations state=directory
+
 - name: env script
   template: src=templates/drupal/scripts/env.sh dest=/home/smile/{{ project }}/scripts/env.sh
+
+- name: fix-perms script
+  template: src=templates/drupal/scripts/fix-perms.sh dest=/home/smile/{{ project }}/scripts/fix-perms.sh
 
 - name: rebuild script
   template: src=templates/drupal/scripts/rebuild.sh dest=/home/smile/{{ project }}/scripts/rebuild.sh
@@ -54,5 +73,3 @@
 - name: update script
   template: src=templates/drupal/scripts/update.sh dest=/home/smile/{{ project }}/scripts/update.sh
 
-- name: fix-perms script
-  template: src=templates/drupal/scripts/fix-perms.sh dest=/home/smile/{{ project }}/scripts/fix-perms.sh

@@ -21,7 +21,7 @@ fi
 
 # Set permissions for scripts.
 chmod +x $PROJECT_PATH/scripts/*
-chmod +x $PROJECT_PATH/conf/solr/*
+# chmod +x $PROJECT_PATH/conf/solr/*
 
 # Set permissions for media.
 if [ -d "$PROJECT_PATH/data/files" ]

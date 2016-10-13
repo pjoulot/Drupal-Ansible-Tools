@@ -1,9 +1,20 @@
 - name: Remove default varnish file
   file: path=/etc/default/varnish
         state=absent
+  when: ansible_os_family != "Debian"
 
 - name: Create varnish file to listen to port 80
   template: src=templates/drupal/conf/varnish/varnish dest=/etc/default/varnish
+  when: ansible_os_family != "Debian"
+
+- name: Remove varnish.service
+  file: path=/lib/systemd/system/varnish.service
+        state=absent
+  when: ansible_os_family == "Debian"
+
+- name: Generate new varnish.service for Debian systems
+  template: src=templates/drupal/conf/varnish/varnish.service dest=/lib/systemd/system/varnish.service
+  when: ansible_os_family == "Debian"
 
 - name: Remove default vcl
   file: path=/etc/varnish/default.vcl

@@ -21,7 +21,7 @@ $databases['default']['default'] = array (
   'driver' => 'mysql',
 );
 
-$settings['install_profile'] = 'standard';
+$settings['install_profile'] = {{ drupal_profile }};
 
 
 

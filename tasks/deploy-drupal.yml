@@ -19,11 +19,24 @@
 - name: Add exectution rights
   file: path=/home/smile/{{ project }}/scripts/rebuild.sh mode=0774
 
-- name: launch rebuild-lxc
-  command: /home/smile/{{ project }}/scripts/rebuild.sh
+- name: Remove php.ini cli
+  file: path=/etc/php5/cli/php.ini
+            state=absent
+
+- name: Symlink php.ini cli
+  file: src=/home/smile/{{ project }}/conf/php/cli/php.ini dest=/etc/php5/cli/php.ini state=link
+
+- name: fix-perms script
+  template: src=templates/drupal/scripts/fix-perms.sh dest=/home/smile/{{ project }}/scripts/fix-perms.sh
+
+- name: Add write rights on settings.php for installation
+  file: path=/var/www/{{ project }}/web/sites/default/settings.php mode=0776
 
 - name: install website
-  command: drush @dev  site-install minimal --db-su="root" --db-su-pw="" --account-name=admin --account-pass=admin --db-url=mysql://{{ project }}:{{ project }}@localhost:3306/{{ project }} --sites-subdir={{ project }} -y
+  command: drush @dev  site-install {{ drupal_profile }} --db-su="root" --db-su-pw="" --account-name=admin --account-pass=admin --db-url=mysql://{{ project }}:{{ project }}@localhost:3306/{{ project }} --sites-subdir={{ project }} -y
+
+- name: Remove write rights on settings.php after installation
+  file: path=/var/www/{{ project }}/web/sites/default/settings.php mode=0774
 
 - name: Remove default site config setting
   file: path=/var/www/{{ project }}/web/sites/settings.local.php
@@ -37,5 +50,13 @@
 
 - name: Symlink services drupal
   file: src=/home/smile/{{ project }}/conf/drupal/default/local.services.yml dest=/var/www/{{ project }}/web/sites/default/local.services.yml state=link
+
+- name: Remove drupal files folder
+  file: path=/var/www/{{ project }}/web/sites/default/files
+            state=absent
+
+- name: Symlink drupal files folder
+  file: src=/home/smile/{{ project }}/data/files dest=/var/www/{{ project }}/web/sites/default/files state=link
+
 #- name: Symlink sites drupal
 #  file: src=/home/smile/{{ project }}/conf/drupal/sites.php dest=/var/www/html/{{ project }}/sites/sites.php state=link

@@ -1,5 +1,5 @@
 - name: Install drupal
-  shell: composer create-project drupal-composer/drupal-project:8.x-dev {{ project }} creates={{ project }}
+  shell: composer create-project drupal-composer/drupal-project:8.x-dev {{ project }} creates=/var/www/{{ project }}
   tags: composer
 
 - name: Move drupal to correct location
@@ -9,4 +9,4 @@
   include: tasks/init-project.yml project={{ project }}
 
 - name: Deploy Drupal Website
-  include: tasks/deploy-drupal.yml
+  include: tasks/deploy-drupal.yml drupal_profile={{ drupal_profile }}
