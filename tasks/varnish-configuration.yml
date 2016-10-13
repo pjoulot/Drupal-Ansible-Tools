@@ -1,0 +1,21 @@
+- name: Remove default varnish file
+  file: path=/etc/default/varnish
+        state=absent
+
+- name: Create varnish file to listen to port 80
+  template: src=templates/drupal/conf/varnish/varnish dest=/etc/default/varnish
+
+- name: Remove default vcl
+  file: path=/etc/varnish/default.vcl
+        state=absent
+
+- name: Create the varnish vcl
+  template: src=templates/drupal/conf/varnish/default.vcl dest=/home/smile/{{ project }}/conf/varnish/default.vcl
+
+- name: Link varnish to the vcl file
+  file: src=/home/smile/{{ project }}/conf/varnish/default.vcl dest=/etc/varnish/default.vcl state=link
+
+- name: Reload daemon
+  shell: systemctl daemon-reload && systemctl restart varnish.service
+  notify:
+  - restart varnish

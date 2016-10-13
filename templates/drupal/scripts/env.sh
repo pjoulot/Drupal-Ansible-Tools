@@ -21,7 +21,7 @@ DRUPAL_ADMIN_USER=admin
 DRUPAL_ADMIN_PWD=drupal
 if [ -z "$DRUPAL_DB_URL" ]
 then
-    DRUPAL_DB_URL=mysql://drupal:drupal@localhost/drupal
+    DRUPAL_DB_URL=mysql://{{ project }}:{{ project }}@localhost/{{ project }}
 fi
 if [ -z "$DRUPAL_ADMIN_MAIL" ]
 then
@@ -38,7 +38,7 @@ PROJECT_PATH="/home/smile/{{ project }}"
 ########## Environment variables ##########
 case "$ENV" in
     dev)
-        WWW_PATH="/var/www/{{ project }}"
+        WWW_PATH="/var/www/{{ project }}/web"
         FEATURES=0
         ALLOW_SSH=0
         UPDATE_CONF=0

@@ -42,7 +42,7 @@ fi
 
 VARNISH_ENABLE=$7
 if [ -z "$7" ]; then
-    read -p "Do you want to activate Varnish? Y or N (default: yes)         : " VARNISH_ENABLE
+    read -p "Do you want to install Varnish? Y or N (default: yes): " VARNISH_ENABLE
 fi
 
 if [ "$VARNISH_ENABLE" == "N" || "$VARNISH_ENABLE" == "n" || "$VARNISH_ENABLE" == "no" ]; then
