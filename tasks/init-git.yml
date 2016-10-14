@@ -1,0 +1,26 @@
+- name: Go to the project folder
+  shell: cd /home/smile/{{ project }}
+
+- name: Initialize Git
+  shell: git init
+
+- name: Create a gitignore file
+  file: path=.gitignore state=touch
+
+- name: Add the remote
+  file: "git remote add origin {{ gitpath }}"
+
+- name: Add all the files of the project
+  shell: git add .
+
+- name: Set a name to the git user
+  shell: git config --global user.name "{{ project }}"
+
+- name: Set an email for the git user
+  shell: git config --global user.email "{{ project }}@smile.fr"
+
+- name: Commit the project initialization
+  shell: "git commit -m \"Initialization of the project {{ project }}\""
+
+- name: Push to the first commit
+  shell: git push -u origin master
