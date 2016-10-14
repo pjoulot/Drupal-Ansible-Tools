@@ -1,14 +1,6 @@
 - name: Activate vhost
   file: src=/home/smile/{{ project }}/conf/apache/{{ project_url }}.conf dest=/etc/apache2/sites-enabled/{{ project_url }}.conf state=link
 
-- name: Remove default php.ini
-  file: path=/etc/php5/cli/php.ini
-        state=absent
-
-- name: Remove php.ini apache2
-  file: path=/etc/php5/apache2/php.ini
-            state=absent
-
 - name: Symlink php.ini apache2
   file: src=/home/smile/{{ project }}/conf/php/apache2/php.ini dest=/etc/php5/apache2/php.ini state=link
 

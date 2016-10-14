@@ -6,7 +6,8 @@
       include: tasks/system.yml
     - name: Drupal Installation
       include: tasks/drupal-install.yml project={{ project }} project_url={{ project_url }} drupal_profile={{ drupal_profile }}
-
+    #- name: Initialize the project into the git repository
+    #  include: tasks/init-git.yml gitpath={{ gitpath }}
   ###################
   # Handlers
   ###################

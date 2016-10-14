@@ -14,7 +14,7 @@ $databases['default']['default'] = array (
   'password' => {{ project }},
   'prefix' => '',
   'host' => 'localhost',
-  'port' => '',
+  'port' => '3306',
   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
   'driver' => 'mysql',
 );

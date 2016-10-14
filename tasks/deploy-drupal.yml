@@ -16,24 +16,19 @@
 - name: Symlink alias smile
   file: src=/home/smile/{{ project }}/conf/drupal/drush/aliases.drushrc.php dest=/home/smile/.drush/aliases.drushrc.php state=link
 
-- name: Add exectution rights
-  file: path=/home/smile/{{ project }}/scripts/rebuild.sh mode=0774
-
-- name: Remove php.ini cli
-  file: path=/etc/php5/cli/php.ini
-            state=absent
-
 - name: Symlink php.ini cli
   file: src=/home/smile/{{ project }}/conf/php/cli/php.ini dest=/etc/php5/cli/php.ini state=link
-
-- name: fix-perms script
-  template: src=templates/drupal/scripts/fix-perms.sh dest=/home/smile/{{ project }}/scripts/fix-perms.sh
 
 - name: Add write rights on settings.php for installation
   file: path=/var/www/{{ project }}/web/sites/default/settings.php mode=0776
 
 - name: install website
   command: drush @dev  site-install {{ drupal_profile }} --db-su="root" --db-su-pw="" --account-name=admin --account-pass=admin --db-url=mysql://{{ project }}:{{ project }}@localhost:3306/{{ project }} -y
+
+- name: Include the local settings file 
+  lineinfile:
+    dest: /var/www/{{ project }}/web/sites/default/settings.php
+    line: "\nif (file_exists(__DIR__ . '/settings.local.php')) {\n  include __DIR__ . '/settings.local.php';\n}"
 
 - name: Remove write rights on settings.php after installation
   file: path=/var/www/{{ project }}/web/sites/default/settings.php mode=0774
@@ -57,6 +52,9 @@
 
 - name: Symlink drupal files folder
   file: src=/home/smile/{{ project }}/data/files dest=/var/www/{{ project }}/web/sites/default/files state=link
+
+- name: Correct permissions
+  shell: bash /home/smile/{{ project }}/scripts/fix-perms.sh
 
 #- name: Symlink sites drupal
 #  file: src=/home/smile/{{ project }}/conf/drupal/sites.php dest=/var/www/html/{{ project }}/sites/sites.php state=link
