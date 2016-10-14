@@ -8,8 +8,6 @@ $settings['trusted_host_patterns'] = array(
   'localhost'
 );
 
-$settings['hash_salt'] = {{ project }};
-
 $databases['default']['default'] = array (
   'database' => {{ project }},
   'username' => {{ project }},

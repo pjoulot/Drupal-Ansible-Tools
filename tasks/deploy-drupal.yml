@@ -33,7 +33,7 @@
   file: path=/var/www/{{ project }}/web/sites/default/settings.php mode=0776
 
 - name: install website
-  command: drush @dev  site-install {{ drupal_profile }} --db-su="root" --db-su-pw="" --account-name=admin --account-pass=admin --db-url=mysql://{{ project }}:{{ project }}@localhost:3306/{{ project }} --sites-subdir={{ project }} -y
+  command: drush @dev  site-install {{ drupal_profile }} --db-su="root" --db-su-pw="" --account-name=admin --account-pass=admin --db-url=mysql://{{ project }}:{{ project }}@localhost:3306/{{ project }} -y
 
 - name: Remove write rights on settings.php after installation
   file: path=/var/www/{{ project }}/web/sites/default/settings.php mode=0774
