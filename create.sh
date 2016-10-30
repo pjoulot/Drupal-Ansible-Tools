@@ -82,7 +82,8 @@ echo "Clean in case an lxc with the same name has already been created before"
 sed "/$URL/d" ./inventory/dev/hosts > ./inventory/dev/hosts
 #Erase the file, find why
 #sudo sh -c "sed '/$URL/d' /etc/hosts > /etc/hosts"
-ssh-keygen -f "/home/`whoami`/.ssh/known_hosts" -R $URL
+CURRENT_USER=`whoami`
+ssh-keygen -f "/home/$CURRENT_USER/.ssh/known_hosts" -R $URL
 
 # Add an alias to be more user friendly than the  IP Address
 
@@ -99,7 +100,6 @@ ssh -p 22 "root@$URL" "apt-get update; apt-get install python -y;"
 ansible-playbook -i inventory/dev  site.yml --extra-vars "project=$DOMAIN project_url=$URL project_vhost=$VHOST gitpath=$GIT project_integ=test project_name=$PROJECT_NAME drupal_dbname=$DRUPAL_DBNAME drupal_dbuser=$DRUPAL_DBUSER drupal_dbpass=$DRUPAL_DBPASS drupal_profile=$DRUPAL_PROFILE varnish_port=$VARNISH_PORT apache_port=$APACHE_PORT user_name=$USER_NAME"
 
 # Copy the project into the host and mount it into the lxc container
-CURRENT_USER=`whoami`
 echo "Move the project to the host (/home/$CURRENT_USER/lxc/$DOMAIN)"
 if [ ! -d "/home/$CURRENT_USER/lxc" ]; then
   mkdir /home/$CURRENT_USER/lxc
