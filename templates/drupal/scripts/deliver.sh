@@ -46,19 +46,16 @@ fi
 set -e
 set -o pipefail
 
-$ECHO "Changing to the environment branch"
+echo "Changing to the environment branch"
 git checkout $ENV
 
-$ECHO "Purging local modifications..."
+echo "Purging local modifications..."
 git reset --hard HEAD
 
-$ECHO "Purging local untracked files..."
-git clean -f -d
-
-$ECHO "Grabbing the latest code from the repository..."
+echo "Grabbing the latest code from the repository..."
 git fetch --tags
 
-$ECHO "Switch to appropriate tag (${TAG})..."
+echo "Switch to appropriate tag (${TAG})..."
 git checkout tags/$TAG
 
 # Create the folder with the files that need to be updated.
