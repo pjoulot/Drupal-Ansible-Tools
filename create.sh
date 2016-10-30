@@ -98,3 +98,15 @@ ssh -p 22 "root@$URL" "apt-get update; apt-get install python -y;"
 # Launch ansible
 ansible-playbook -i inventory/dev  site.yml --extra-vars "project=$DOMAIN project_url=$URL project_vhost=$VHOST gitpath=$GIT project_integ=test project_name=$PROJECT_NAME drupal_dbname=$DRUPAL_DBNAME drupal_dbuser=$DRUPAL_DBUSER drupal_dbpass=$DRUPAL_DBPASS drupal_profile=$DRUPAL_PROFILE varnish_port=$VARNISH_PORT apache_port=$APACHE_PORT user_name=$USER_NAME"
 
+# Copy the project into the host and mount it into the lxc container
+CURRENT_USER=`whoami`
+echo "Move the project to the host (/home/$CURRENT_USER/lxc/$DOMAIN)"
+if [ ! -d "/home/$CURRENT_USER/lxc" ]; then
+  mkdir /home/$CURRENT_USER/lxc
+fi
+if [ ! -d "/home/$CURRENT_USER/lxc/$DOMAIN" ]; then
+  scp -r root@$URL:/home/$USER_NAME/$DOMAIN /home/$CURRENT_USER/lxc/
+  sudo sh -c "echo \"lxc.mount.entry = /home/$CURRENT_USER/lxc/$DOMAIN /var/lib/lxc/$DOMAIN/rootfs/home/$USER_NAME/$DOMAIN none bind 0 0\" >> /var/lib/lxc/$DOMAIN/config"
+  sudo lxc-stop -n $DOMAIN
+  sudo lxc-start -n $DOMAIN
+fi
