@@ -66,9 +66,9 @@ mkdir /home/{{ user_name }}/releases/$TAG/web/modules
 mkdir /home/{{ user_name }}/releases/$TAG/web/sites
 mkdir /home/{{ user_name }}/releases/$TAG/web/sites/default
 # Copy the custom modules
-cp -R {{ project_path }}/src/modules/custom /home/{{ user_name }}/releases/$TAG/web/
+cp -R {{ project_path }}/src/modules/custom /home/{{ user_name }}/releases/$TAG/web/modules/
 # Copy the custom themes
-cp -R {{ project_path }}/src/themes/custom /home/{{ user_name }}/releases/$TAG/web/
+cp -R {{ project_path }}/src/themes/custom /home/{{ user_name }}/releases/$TAG/web/themes/
 # Copy the composer.json
 cp -f {{ project_path }}/conf/drupal/composer.json /home/{{ user_name }}/releases/$TAG/
 # Copy the local settings and services files

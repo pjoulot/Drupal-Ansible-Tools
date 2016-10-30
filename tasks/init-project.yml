@@ -60,8 +60,11 @@
 - name: drush aliases
   template: src=templates/drupal/conf/drupal/drush/aliases.drushrc.php dest={{ project_path }}/conf/drupal/drush/aliases.drushrc.php
 
-- name: Source directory
-  file: path={{ project_path }}/src/sites/all/modules/custom state=directory
+- name: Source modules directory
+  file: path={{ project_path }}/src/modules/custom state=directory
+
+- name: Source themes directory
+  file: path={{ project_path }}/src/themes/custom state=directory
 
 - name: Move the drupal composer.json into the project folder
   shell: mv /var/www/{{ project }}/composer.json {{ project_path }}/conf/drupal/composer.json creates={{ project_path }}/conf/drupal/composer.json

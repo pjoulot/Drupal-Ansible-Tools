@@ -53,6 +53,12 @@
 - name: Symlink drupal files folder
   file: src={{ project_path }}/data/files dest=/var/www/{{ project }}/web/sites/default/files state=link
 
+- name: Symlink the modules custom folder
+  file: src={{ project_path }}/src/modules/custom dest=/var/www/{{ project }}/web/modules/custom state=link
+
+- name: Symlink the themes custom folder
+  file: src={{ project_path }}/src/themes/custom dest=/var/www/{{ project }}/web/themes/custom state=link
+
 - name: Correct permissions
   shell: bash {{ project_path }}/scripts/fix-perms.sh
 
