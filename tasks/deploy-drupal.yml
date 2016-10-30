@@ -7,17 +7,17 @@
 - name: drupal drush root folder
   file: path=/root/.drush state=directory
 
-- name: drupal drush smile folder
-  file: path=/home/smile/.drush state=directory
+- name: drupal drush user folder
+  file: path=/home/{{ user_name }}/.drush state=directory
 
 - name: Symlink alias root
-  file: src=/home/smile/{{ project }}/conf/drupal/drush/aliases.drushrc.php dest=/root/.drush/aliases.drushrc.php state=link
+  file: src={{ project_path }}/conf/drupal/drush/aliases.drushrc.php dest=/root/.drush/aliases.drushrc.php state=link
 
-- name: Symlink alias smile
-  file: src=/home/smile/{{ project }}/conf/drupal/drush/aliases.drushrc.php dest=/home/smile/.drush/aliases.drushrc.php state=link
+- name: Symlink alias for the user
+  file: src={{ project_path }}/conf/drupal/drush/aliases.drushrc.php dest=/home/{{ user_name }}/.drush/aliases.drushrc.php state=link
 
 - name: Symlink php.ini cli
-  file: src=/home/smile/{{ project }}/conf/php/cli/php.ini dest=/etc/php5/cli/php.ini state=link
+  file: src={{ project_path }}/conf/php/cli/php.ini dest=/etc/php5/cli/php.ini state=link
 
 - name: Add write rights on settings.php for installation
   file: path=/var/www/{{ project }}/web/sites/default/settings.php mode=0776
@@ -41,20 +41,20 @@
             state=absent 
 
 - name: Symlink settings drupal
-  file: src=/home/smile/{{ project }}/conf/drupal/default/settings.local.php dest=/var/www/{{ project }}/web/sites/default/settings.local.php state=link
+  file: src={{ project_path }}/conf/drupal/default/settings.local.php dest=/var/www/{{ project }}/web/sites/default/settings.local.php state=link
 
 - name: Symlink services drupal
-  file: src=/home/smile/{{ project }}/conf/drupal/default/local.services.yml dest=/var/www/{{ project }}/web/sites/default/local.services.yml state=link
+  file: src={{ project_path }}/conf/drupal/default/local.services.yml dest=/var/www/{{ project }}/web/sites/default/local.services.yml state=link
 
 - name: Remove drupal files folder
   file: path=/var/www/{{ project }}/web/sites/default/files
             state=absent
 
 - name: Symlink drupal files folder
-  file: src=/home/smile/{{ project }}/data/files dest=/var/www/{{ project }}/web/sites/default/files state=link
+  file: src={{ project_path }}/data/files dest=/var/www/{{ project }}/web/sites/default/files state=link
 
 - name: Correct permissions
-  shell: bash /home/smile/{{ project }}/scripts/fix-perms.sh
+  shell: bash {{ project_path }}/scripts/fix-perms.sh
 
 #- name: Symlink sites drupal
-#  file: src=/home/smile/{{ project }}/conf/drupal/sites.php dest=/var/www/html/{{ project }}/sites/sites.php state=link
+#  file: src={{ project_path }}/conf/drupal/sites.php dest=/var/www/html/{{ project }}/sites/sites.php state=link

@@ -1,26 +1,40 @@
 - name: Go to the project folder
-  shell: cd /home/smile/{{ project }}
+  shell: cd {{ project_path }}
 
 - name: Initialize Git
-  shell: git init
+  shell: git init 
+  args:
+    chdir: "{{ project_path }}"
 
 - name: Create a gitignore file
-  file: path=.gitignore state=touch
+  file: path={{ project_path }}/.gitignore state=touch
 
 - name: Add the remote
-  file: "git remote add origin {{ gitpath }}"
+  shell: "git remote add origin {{ gitpath }}  || true"
+  args:
+    chdir: "{{ project_path }}"
 
 - name: Add all the files of the project
   shell: git add .
+  args:
+    chdir: "{{ project_path }}"
 
 - name: Set a name to the git user
   shell: git config --global user.name "{{ project }}"
+  args:
+    chdir: "{{ project_path }}"
 
 - name: Set an email for the git user
   shell: git config --global user.email "{{ project }}@smile.fr"
+  args:
+    chdir: "{{ project_path }}"
 
 - name: Commit the project initialization
   shell: "git commit -m \"Initialization of the project {{ project }}\""
+  args:
+    chdir: "{{ project_path }}"
 
-- name: Push to the first commit
-  shell: git push -u origin master
+#- name: Push the first commit
+#  shell: git push -u origin master
+#  args:
+#    chdir: "{{ project_path }}"

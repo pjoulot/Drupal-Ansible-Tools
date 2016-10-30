@@ -2,19 +2,19 @@
 # Initialize Drupal project  #
 ##############################
 - name: Create project directory
-  file: path=/home/smile/{{ project }} state=directory
+  file: path={{ project_path }} state=directory
 - name: Create conf directory
-  file: path=/home/smile/{{ project }}/conf state=directory
+  file: path={{ project_path }}/conf state=directory
 - name: Create apache conf directory
-  file: path=/home/smile/{{ project }}/conf/apache state=directory
+  file: path={{ project_path }}/conf/apache state=directory
 - name: Create varnish conf directory
-  file: path=/home/smile/{{ project }}/conf/varnish state=directory
+  file: path={{ project_path }}/conf/varnish state=directory
 - name: Create php conf directory
-  file: path=/home/smile/{{ project }}/conf/php state=directory
+  file: path={{ project_path }}/conf/php state=directory
 - name: Create php/cli conf directory
-  file: path=/home/smile/{{ project }}/conf/php/cli state=directory
+  file: path={{ project_path }}/conf/php/cli state=directory
 - name: Create php/apache2 conf directory
-  file: path=/home/smile/{{ project }}/conf/php/apache2 state=directory
+  file: path={{ project_path }}/conf/php/apache2 state=directory
 
 - name: Set max nesting level to install drupal
   lineinfile:
@@ -22,79 +22,88 @@
     line: "; Needed to install a drupal 8 website.\nxdebug.max_nesting_level = 256"
 
 - name: Copy the php.ini into apache configuration if it not already exists
-  copy: src=/etc/php5/cli/php.ini dest=/etc/php5/apache2/php.ini force=no
+  copy: src=/etc/php5/cli/php.ini dest=/etc/php5/apache2/php.ini force=no remote_src=true
 
 - name: Move php.ini cli into the project folder
-  shell: mv /etc/php5/cli/php.ini /home/smile/{{ project }}/conf/php/cli/php.ini creates=/home/smile/{{ project }}/conf/php/cli/php.ini
+  shell: mv /etc/php5/cli/php.ini {{ project_path }}/conf/php/cli/php.ini creates={{ project_path }}/conf/php/cli/php.ini
 
 - name: Move php.ini apache2 into the project folder
-  shell: mv /etc/php5/apache2/php.ini /home/smile/{{ project }}/conf/php/apache2/php.ini creates=/home/smile/{{ project }}/conf/php/apache2/php.ini
+  shell: mv /etc/php5/apache2/php.ini {{ project_path }}/conf/php/apache2/php.ini creates={{ project_path }}/conf/php/apache2/php.ini
 
 - name: Setup php cli for our app
-  template: src=templates/drupal/conf/php/cli/php.ini dest=/home/smile/{{ project }}/conf/php/cli/php.ini
+  template: src=templates/drupal/conf/php/cli/php.ini dest={{ project_path }}/conf/php/cli/php.ini
 
 - name: Setup php apache2 for our app
-  template: src=templates/drupal/conf/php/apache2/php.ini dest=/home/smile/{{ project }}/conf/php/apache2/php.ini
+  template: src=templates/drupal/conf/php/apache2/php.ini dest={{ project_path }}/conf/php/apache2/php.ini
 
 - name: Setup apache config for our app
-  template: src=templates/drupal/conf/apache/project.conf dest=/home/smile/{{ project }}/conf/apache/{{ project_url }}.conf
+  template: src=templates/drupal/conf/apache/project.conf dest={{ project_path }}/conf/apache/{{ project_url }}.conf
 
 - name: Define apache ports
-  template: src=templates/drupal/conf/apache/ports.conf dest=/home/smile/{{ project }}/conf/apache/ports.conf
+  template: src=templates/drupal/conf/apache/ports.conf dest={{ project_path }}/conf/apache/ports.conf
 
 - name: drupal sources folder
-  file: path=/home/smile/{{ project }}/conf/drupal state=directory
+  file: path={{ project_path }}/conf/drupal state=directory
 
 - name: drupal default site folder
-  file: path=/home/smile/{{ project }}/conf/drupal/default state=directory
+  file: path={{ project_path }}/conf/drupal/default state=directory
 
 - name: drupal drush folder
-  file: path=/home/smile/{{ project }}/conf/drupal/drush state=directory
+  file: path={{ project_path }}/conf/drupal/drush state=directory
 
 - name: default site settings
-  template: src=templates/drupal/conf/drupal/default/settings.local.php dest=/home/smile/{{ project }}/conf/drupal/default/settings.local.php
+  template: src=templates/drupal/conf/drupal/default/settings.local.php dest={{ project_path }}/conf/drupal/default/settings.local.php
 
 - name: local services
-  template: src=templates/drupal/conf/drupal/default/local.services.yml dest=/home/smile/{{ project }}/conf/drupal/default/local.services.yml
+  template: src=templates/drupal/conf/drupal/default/local.services.yml dest={{ project_path }}/conf/drupal/default/local.services.yml
 
 - name: drush aliases
-  template: src=templates/drupal/conf/drupal/drush/aliases.drushrc.php dest=/home/smile/{{ project }}/conf/drupal/drush/aliases.drushrc.php
+  template: src=templates/drupal/conf/drupal/drush/aliases.drushrc.php dest={{ project_path }}/conf/drupal/drush/aliases.drushrc.php
 
 - name: Source directory
-  file: path=/home/smile/{{ project }}/src/sites/all/modules/custom state=directory
+  file: path={{ project_path }}/src/sites/all/modules/custom state=directory
+
+- name: Move the drupal composer.json into the project folder
+  shell: mv /var/www/{{ project }}/composer.json {{ project_path }}/conf/drupal/composer.json creates={{ project_path }}/conf/drupal/composer.json
+
+- name: Symlink the composer.json
+  file: src={{ project_path }}/conf/drupal/composer.json dest=/var/www/{{ project }}/composer.json state=link
 
 - name: Script directory
-  file: path=/home/smile/{{ project }}/scripts state=directory
+  file: path={{ project_path }}/scripts state=directory
 
 - name: drupal data folder
-  file: path=/home/smile/{{ project }}/data state=directory
+  file: path={{ project_path }}/data state=directory
 
 - name: drupal files folder
-  file: path=/home/smile/{{ project }}/data/files state=directory
+  file: path={{ project_path }}/data/files state=directory
 
 - name: drupal translations folder
-  file: path=/home/smile/{{ project }}/data/files/translations state=directory
+  file: path={{ project_path }}/data/files/translations state=directory
 
 - name: env script
-  template: src=templates/drupal/scripts/env.sh dest=/home/smile/{{ project }}/scripts/env.sh
+  template: src=templates/drupal/scripts/env.sh dest={{ project_path }}/scripts/env.sh
 
 - name: fix-perms script
-  template: src=templates/drupal/scripts/fix-perms.sh dest=/home/smile/{{ project }}/scripts/fix-perms.sh
+  template: src=templates/drupal/scripts/fix-perms.sh dest={{ project_path }}/scripts/fix-perms.sh
 
 - name: rebuild script
-  template: src=templates/drupal/scripts/rebuild.sh dest=/home/smile/{{ project }}/scripts/rebuild.sh
+  template: src=templates/drupal/scripts/rebuild.sh dest={{ project_path }}/scripts/rebuild.sh
 
 - name: update script
-  template: src=templates/drupal/scripts/update.sh dest=/home/smile/{{ project }}/scripts/update.sh
+  template: src=templates/drupal/scripts/update.sh dest={{ project_path }}/scripts/update.sh
+
+- name: deliver script
+  template: src=templates/drupal/scripts/deliver.sh dest={{ project_path }}/scripts/deliver.sh
 
 - name: Add exectution rights rebuild.sh
-  file: path=/home/smile/{{ project }}/scripts/rebuild.sh mode=0774
+  file: path={{ project_path }}/scripts/rebuild.sh mode=0774
 
 - name: Add exectution rights update.sh
-  file: path=/home/smile/{{ project }}/scripts/update.sh mode=0774
+  file: path={{ project_path }}/scripts/update.sh mode=0774
 
 - name: Add exectution rights fix-perms.sh
-  file: path=/home/smile/{{ project }}/scripts/fix-perms.sh mode=0774
+  file: path={{ project_path }}/scripts/fix-perms.sh mode=0774
 
 - name: Add exectution rights env.sh
-  file: path=/home/smile/{{ project }}/scripts/env.sh mode=0774
+  file: path={{ project_path }}/scripts/env.sh mode=0774

@@ -9,13 +9,13 @@ UPDATE_CONF=0
 
 ########## General variables ##########
 SYSTEM="{{ ansible_os_family }}"
-USER=smile
+USER="{{ user_name }}"
 GROUP=10000
 
 
 
 ########## Drupal variables ##########
-DRUPAL_PROFIL="standard" # OR "minimal"
+DRUPAL_PROFIL="{{ drupal_profile }}"
 DRUPAL_LOCALE="en"
 DRUPAL_ADMIN_USER=admin
 DRUPAL_ADMIN_PWD=drupal
@@ -31,7 +31,7 @@ fi
 
 
 ########## Project variables ##########
-PROJECT_PATH="/home/smile/{{ project }}"
+PROJECT_PATH="{{ project_path }}"
 
 
 

@@ -1,9 +1,11 @@
+- stat: path=/var/www/{{ project }}
+  register: drupal_directory
 - name: Install drupal
-  shell: composer create-project drupal-composer/drupal-project:8.x-dev {{ project }} creates=/var/www/{{ project }}
-  tags: composer
-
-- name: Move drupal to correct location
-  shell: mv {{ project }} /var/www/ creates=/var/www/{{ project }} creates=/var/www/{{ project }}
+  composer:
+    command: "create-project"
+    arguments: "drupal-composer/drupal-project:8.x-dev {{ project }}"
+    working_dir: "/var/www"
+  when: drupal_directory.stat.exists == False
 
 - name: Initialize Drupal Project
   include: tasks/init-project.yml project={{ project }}

@@ -1,13 +1,18 @@
 ---
 - hosts: "{{ project }}.lxc"
   remote_user: root
+  vars:
+    project: "{{ project }}"
+    project_path: "/home/{{ user_name }}/{{ project }}"
+    user_name: "{{ user_name }}"
   tasks:
-    - name: System Requirement
+    - name: Install the system packages
       include: tasks/system.yml
-    - name: Drupal Installation
-      include: tasks/drupal-install.yml project={{ project }} project_url={{ project_url }} drupal_profile={{ drupal_profile }}
-    #- name: Initialize the project into the git repository
-    #  include: tasks/init-git.yml gitpath={{ gitpath }}
+    - name: Install a Drupal website
+      include: tasks/drupal-install.yml
+    - name: Initialize the project into the git repository
+      include: tasks/init-git.yml gitpath={{ gitpath }}
+      when: gitpath is defined
   ###################
   # Handlers
   ###################

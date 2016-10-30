@@ -21,10 +21,10 @@
         state=absent
 
 - name: Create the varnish vcl
-  template: src=templates/drupal/conf/varnish/default.vcl dest=/home/smile/{{ project }}/conf/varnish/default.vcl
+  template: src=templates/drupal/conf/varnish/default.vcl dest={{ project_path }}/conf/varnish/default.vcl
 
 - name: Link varnish to the vcl file
-  file: src=/home/smile/{{ project }}/conf/varnish/default.vcl dest=/etc/varnish/default.vcl state=link
+  file: src={{ project_path }}/conf/varnish/default.vcl dest=/etc/varnish/default.vcl state=link
 
 - name: Reload daemon
   shell: systemctl daemon-reload && systemctl restart varnish.service

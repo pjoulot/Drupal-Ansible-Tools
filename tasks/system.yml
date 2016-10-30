@@ -12,8 +12,54 @@
     - python-dev
     - python-pip
     - curl
+    - ca-certificates
     - build-essential
+    - xz-utils
+    - bash-completion
     - gcc
+    - sudo
+    - vim
+
+###################
+# Php
+###################
+- name: Install PHP and his components
+  apt: name={{ item }} state=present
+  with_items:
+    - php5
+    - php5-curl
+    - php5-gd
+    - php5-mcrypt
+    - php5-mysql
+    - php5-xdebug
+
+###################
+# Apache2
+###################
+- name: Install Apache
+  apt: name={{ item }} state=present
+  with_items:
+    - libapache2-mod-php5
+- name: Remove default site config
+  file: path=/etc/apache2/sites-enabled/000-default.conf
+        state=absent
+
+###################
+# Mysql
+###################
+- name: Install Mysql
+  apt: name={{ item }} state=present
+  with_items:
+    - mysql-server
+    - mysql-client
+
+###################
+# Postfix
+###################
+- name: Install Postfix
+  apt: name={{ item }} state=present
+  with_items:
+    - postfix
 
 ###################
 # REDIS
@@ -21,13 +67,6 @@
 - name: Install Redis-server
   apt: name=redis-server state=present
   when: redis-required is defined
-
-###################
-# Apache2
-###################
-- name: Remove default site config
-  file: path=/etc/apache2/sites-enabled/000-default.conf
-        state=absent
 
 ###################
 # Varnish
@@ -71,3 +110,9 @@
 
 - name: make drush executable
   file: path=/usr/local/bin/drush mode=a+x state=file
+
+###################
+# create user
+###################
+- name: create the user
+  user: name={{ user_name }} password={{ project }} groups="sudo"
