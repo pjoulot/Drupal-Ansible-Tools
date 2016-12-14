@@ -1,0 +1,22 @@
+###################
+# Install nginx
+###################
+- name: Install nginx
+  apt: nginx state=present update_cache=true
+- name: Setup the nginx configuration
+  template: src=templates/drupal/conf/nginx/default dest={{ project_path }}/conf/nginx/default
+- name: Remove default nginx config
+  file: path=/etc/nginx/sites-enabled/default
+        state=absent
+- name: Link nginx coonfiguration file
+  file: src={{ project_path }}/conf/nginx/default dest=/etc/nginx/sites-enabled/default state=link
+###################
+# Generate an autosigned certificate
+###################
+- name: Create the certificate directory
+  file: path=/etc/nginx/ssl state=directory
+- name: Generate the certificate
+  shell: openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt
+
+- name: Restart nginx
+  service: name=nginx state=restarted enabled=yes
