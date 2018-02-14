@@ -42,11 +42,11 @@ fi
 
 DRUPAL_PROFILE=$7
 if [ -z "$7" ]; then
-    read -p "What drupal profile do you want? minimal or standard (default: minimal): " DRUPAL_PROFILE
+    read -p "What drupal profile do you want? minimal or standard (default: standard): " DRUPAL_PROFILE
 fi
 
-if [ "$DRUPAL_PROFILE" != "standard" ]; then
-    DRUPAL_PROFILE="minimal"
+if [ "$DRUPAL_PROFILE" == "" ]; then
+    DRUPAL_PROFILE="standard"
 fi
 
 VARNISH_ENABLE=$8

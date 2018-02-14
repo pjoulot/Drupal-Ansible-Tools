@@ -40,6 +40,9 @@
   apt: name={{ item }} state=present
   with_items:
     - libapache2-mod-php7.0
+- service:
+    name: apache2
+    state: stopped
 - name: Remove default site config
   file: path=/etc/apache2/sites-enabled/000-default.conf
         state=absent
@@ -74,6 +77,10 @@
 - name: Install Varnish
   apt: name=varnish state=present
   when: varnish_port is defined
+  ignore_errors: yes
+- service:
+    name: varnish
+    state: stopped
 
 ###################
 # composer
