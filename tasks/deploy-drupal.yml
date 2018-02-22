@@ -20,7 +20,7 @@
   file: src={{ project_path }}/conf/drupal/drush/aliases.drushrc.php dest=/home/{{ user_name }}/.drush/aliases.drushrc.php state=link
 
 - name: Symlink php.ini cli
-  file: src={{ project_path }}/conf/php/cli/php.ini dest=/etc/php5/cli/php.ini state=link
+  file: src={{ project_path }}/conf/php/cli/php.ini dest=/etc/php/7.0/cli/php.ini state=link
 
 - name: Add write rights on settings.php for installation
   file: path=/var/www/{{ project }}/web/sites/default/settings.php mode=0776

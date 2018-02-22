@@ -2,7 +2,7 @@
   file: src={{ project_path }}/conf/apache/{{ project_url }}.conf dest=/etc/apache2/sites-enabled/{{ project_url }}.conf state=link
 
 - name: Symlink php.ini apache2
-  file: src={{ project_path }}/conf/php/apache2/php.ini dest=/etc/php5/apache2/php.ini state=link
+  file: src={{ project_path }}/conf/php/apache2/php.ini dest=/etc/php/7.0/apache2/php.ini state=link
 
 - name: Remove default site config
   file: path=/etc/apache2/ports.conf

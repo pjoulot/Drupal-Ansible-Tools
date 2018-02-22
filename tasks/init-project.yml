@@ -18,17 +18,17 @@
 
 - name: Set max nesting level to install drupal
   lineinfile:
-    dest: /etc/php5/cli/php.ini
+    dest: /etc/php/7.0/cli/php.ini
     line: "; Needed to install a drupal 8 website.\nxdebug.max_nesting_level = 256"
 
 - name: Copy the php.ini into apache configuration if it not already exists
-  copy: src=/etc/php5/cli/php.ini dest=/etc/php5/apache2/php.ini force=no remote_src=true
+  copy: src=/etc/php/7.0/cli/php.ini dest=/etc/php/7.0/apache2/php.ini force=no remote_src=true
 
 - name: Move php.ini cli into the project folder
-  shell: mv /etc/php5/cli/php.ini {{ project_path }}/conf/php/cli/php.ini creates={{ project_path }}/conf/php/cli/php.ini
+  shell: mv /etc/php/7.0/cli/php.ini {{ project_path }}/conf/php/cli/php.ini creates={{ project_path }}/conf/php/cli/php.ini
 
 - name: Move php.ini apache2 into the project folder
-  shell: mv /etc/php5/apache2/php.ini {{ project_path }}/conf/php/apache2/php.ini creates={{ project_path }}/conf/php/apache2/php.ini
+  shell: mv /etc/php/7.0/apache2/php.ini {{ project_path }}/conf/php/apache2/php.ini creates={{ project_path }}/conf/php/apache2/php.ini
 
 - name: Setup php cli for our app
   template: src=templates/drupal/conf/php/cli/php.ini dest={{ project_path }}/conf/php/cli/php.ini
