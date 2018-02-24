@@ -79,11 +79,12 @@
 ###################
 - name: Install Varnish
   apt: name=varnish state=present
-  when: varnish_port is defined
+  when: varnish_port != "0"
   ignore_errors: yes
 - service:
     name: varnish
     state: stopped
+  when: varnish_port != "0"
 
 ###################
 # composer

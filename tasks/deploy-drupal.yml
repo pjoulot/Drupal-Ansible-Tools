@@ -3,9 +3,11 @@
 
 - name: Configure Varnish if needed
   include: tasks/varnish-configuration.yml varnish_port={{ varnish_port }}
+  when: varnish_port != "0"
 
 - name: Configure Nginx if needed
   include: tasks/nginx-configuration.yml
+  when: varnish_port != "0"
 
 - name: drupal drush root folder
   file: path=/root/.drush state=directory
