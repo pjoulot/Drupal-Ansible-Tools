@@ -28,7 +28,7 @@
   file: path=/var/www/{{ project }}/web/sites/default/settings.php mode=0776
 
 - name: install website
-  command: drush @dev  site-install {{ drupal_profile }} --db-su="root" --db-su-pw="" --account-name=admin --account-pass=admin --db-url=mysql://{{ project }}:{{ project }}@localhost:3306/{{ project }} -y
+  command: drush  site-install {{ drupal_profile }} --root=/var/www/{{ project }}/web --db-su="root" --db-su-pw="" --account-name=admin --account-pass=admin --db-url=mysql://{{ project }}:{{ project }}@localhost:3306/{{ project }} -y
 
 - name: Include the local settings file 
   lineinfile:
