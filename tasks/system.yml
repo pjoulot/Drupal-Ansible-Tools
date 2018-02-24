@@ -19,7 +19,6 @@
     - gcc
     - sudo
     - vim
-    - wget
 
 ###################
 # Php
@@ -118,7 +117,7 @@
 ###################
 
 - name: install drush
-  shell: wget -O drush.phar https://github.com/drush-ops/drush-launcher/releases/download/0.5.1/drush.phar creates=/usr/local/bin/drush
+  shell: php -r "readfile('https://github.com/drush-ops/drush-launcher/releases/download/0.5.1/drush.phar');" > /usr/local/bin/drush creates=/usr/local/bin/drush
 
 - name: make drush executable
   file: path=/usr/local/bin/drush mode=a+x state=file
