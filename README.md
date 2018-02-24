@@ -6,6 +6,10 @@ Compatibility:
 
 - Ubuntu
 
+Broken functionality [needs work]:
+- Varnish
+- Git repo initialization
+
 Requirements:
 
 - sudo apt-get install lxc ansible
