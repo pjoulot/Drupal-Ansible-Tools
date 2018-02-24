@@ -1,11 +1,14 @@
-- stat: path=/var/www/{{ project }}
+- stat: path={{ project_path }}
   register: drupal_directory
 - name: Install drupal
   composer:
     command: "create-project"
     arguments: "drupal-composer/drupal-project:8.x-dev {{ project }}"
-    working_dir: "/var/www"
+    working_dir: "/home/{{ user_name }}"
   when: drupal_directory.stat.exists == False
+
+- name: Symlink the var/www to the project
+  file: src={{ project_path }} dest=/var/www/{{ project }} state=link
 
 - name: Initialize Drupal Project
   include: tasks/init-project.yml project={{ project }}

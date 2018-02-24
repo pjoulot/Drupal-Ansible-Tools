@@ -61,16 +61,10 @@
   template: src=templates/drupal/conf/drupal/drush/aliases.drushrc.php dest={{ project_path }}/conf/drupal/drush/aliases.drushrc.php
 
 - name: Source modules directory
-  file: path={{ project_path }}/src/modules/custom state=directory
+  file: path={{ project_path }}/web/modules/custom state=directory
 
 - name: Source themes directory
-  file: path={{ project_path }}/src/themes/custom state=directory
-
-- name: Move the drupal composer.json into the project folder
-  shell: mv /var/www/{{ project }}/composer.json {{ project_path }}/conf/drupal/composer.json creates={{ project_path }}/conf/drupal/composer.json
-
-- name: Symlink the composer.json
-  file: src={{ project_path }}/conf/drupal/composer.json dest=/var/www/{{ project }}/composer.json state=link
+  file: path={{ project_path }}/web/themes/custom state=directory
 
 - name: Script directory
   file: path={{ project_path }}/scripts state=directory
