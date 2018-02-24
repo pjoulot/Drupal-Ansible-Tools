@@ -56,6 +56,7 @@ fi
 
 if [ "$VARNISH_ENABLE" == "N" ] || [ "$VARNISH_ENABLE" == "n" ] || [ "$VARNISH_ENABLE" == "no" ]; then
     APACHE_PORT=80
+    unset VARNISH_ENABLE
 else
     VARNISH_PORT=80
     APACHE_PORT=81
