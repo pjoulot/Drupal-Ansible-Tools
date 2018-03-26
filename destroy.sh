@@ -10,3 +10,4 @@ sudo lxc-stop -n $DOMAIN
 sudo lxc-destroy -n $DOMAIN 
 sudo sed -i "/$DOMAIN.lxc/d" /etc/hosts
 sudo sed -i "/lxc $DOMAIN/d" /etc/hosts
+rm -Rf ~/lxc/$DOMAIN
