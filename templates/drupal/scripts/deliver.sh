@@ -1,76 +1,69 @@
-#!/bin/sh
+#!/bin/bash
 
-########## Init variables ##########
+repourl=""
 
-# Default variables initialization.
-ENV=;
-TAG=;
+git clone $repourl /tmp/source
+cd /tmp/source
+git checkout master
 
-# CHECK OPTIONS
-for VAR in "$@"
-do
-    case $VAR in
-        info|help )
-            echo "Usage: ./`basename $0` [options]";
-            echo "";
-            echo "  * option env :"
-            echo "    env=[ENV]               Target environment"
-            echo "";
-            echo "  * option tag :"
-            echo "    tag=[YYYYMMDD_HHMM]     Git tag"
-            echo "";
-            exit 0;;
-        --env* )
-            ENV=$(echo $VAR | cut -d "=" -f 2);;
-        --tag* )
-            TAG=$(echo $VAR | cut -d "=" -f 2);;
-        * )
-            echo "Unknown argument '$VAR'.";;
-    esac
+
+releasename=release-{{ project }}
+
+#PIC ssh key must be on server
+mkdir -p /tmp/releases/${releasename}/drupal
+cp -R /tmp/source/* /tmp/releases/${releasename}/drupal/
+cd /tmp/releases/${releasename}/drupal
+composer update
+
+rm -f /tmp/releases/${releasename}/drupal/web/*.txt
+#rm -rf /tmp/releases/release-$env-$BUILD_ID/drupal/sites/routing
+
+cd /tmp/releases/
+
+rm -rf /tmp/releases/${releasename}/drupal/composer.lock
+rm -rf /tmp/releases/${releasename}/drupal/LICENSE
+rm -rf /tmp/releases/${releasename}/drupal/phpunit.xml.dist
+rm -rf /tmp/releases/${releasename}/drupal/README.md
+
+rm -rf /tmp/releases/${releasename}/drupal/web/sites/default
+
+tar -zcf ${releasename}.tgz ${releasename}
+
+rm -rf ${releasename}
+rm -rf /tmp/source/
+echo "The archive is ready to be transfered."
+
+DELIVERY_USER="philippe"
+DELIVERY_SERVER="193.70.0.251"
+DELIVERY_PORT=22
+DELIVERY_FOLDER="{{ project }}"
+
+if [ $DELIVERY_USER = "root" ]
+then
+  DELIVERY_PATH_PACKAGE="/root"
+else
+  DELIVERY_PATH_PACKAGE="/home/$DELIVERY_USER"
+fi
+
+while ! scp -P $DELIVERY_PORT /tmp/releases/${releasename}.tgz $DELIVERY_USER@$DELIVERY_SERVER:${DELIVERY_PATH_PACKAGE}/releases/; do
+  sleep 15
 done
+commands="cd $DELIVERY_PATH_PACKAGE/releases;"
+commands="$commands tar -zxf $releasename.tgz;"
+commands="$commands rm -rf /var/www/$DELIVERY_FOLDER/*;"
+commands="$commands cp -R $releasename/drupal/* /var/www/$DELIVERY_FOLDER/;"
+commands="$commands ln -s /var/www/shared/$DELIVERY_FOLDER /var/www/$DELIVERY_FOLDER/web/sites/$DELIVERY_FOLDER;"
+commands="$commands ln -s /var/www/shared/$DELIVERY_FOLDER /var/www/$DELIVERY_FOLDER/web/sites/default;"
+commands="$commands chown -R $DELIVERY_USER:www-data /var/www/$DELIVERY_FOLDER;"
+commands="$commands rm -f $releasename.tgz;"
+commands="$commands rm -rf $releasename;"
+commands="$commands cd /var/www/$DELIVERY_FOLDER/web;"
+commands="$commands drush cr drush;"
+commands="$commands drush updb -y;"
+commands="$commands drush cr drush;"
+commands="$commands drush entity-updates -y"
+commands="$commands drush fra -y; drush cr"
+commands="$commands drush locale-check; drush locale-update; drush cr"
+ssh $DELIVERY_USER@$DELIVERY_SERVER $commands
 
-# Check variables.
-if [ -z "$TAG" ]
-then
-    echo "missing argument 'tag'."
-    exit 0
-fi
-if [ -z "$ENV" ]
-then
-    echo "missing argument 'env'."
-    exit 0
-fi
-
-# Stop executing the script if any command fails.
-# See http://stackoverflow.com/a/4346420/442022 for details.
-set -e
-set -o pipefail
-
-echo "Changing to the environment branch"
-git checkout $ENV
-
-echo "Purging local modifications..."
-git reset --hard HEAD
-
-echo "Grabbing the latest code from the repository..."
-git fetch --tags
-
-echo "Switch to appropriate tag (${TAG})..."
-git checkout tags/$TAG
-
-# Create the folder with the files that need to be updated.
-mkdir /home/{{ user_name }}/releases/$TAG
-mkdir /home/{{ user_name }}/releases/$TAG/web
-mkdir /home/{{ user_name }}/releases/$TAG/web/themes
-mkdir /home/{{ user_name }}/releases/$TAG/web/modules
-mkdir /home/{{ user_name }}/releases/$TAG/web/sites
-mkdir /home/{{ user_name }}/releases/$TAG/web/sites/default
-# Copy the custom modules
-cp -R {{ project_path }}/src/modules/custom /home/{{ user_name }}/releases/$TAG/web/modules/
-# Copy the custom themes
-cp -R {{ project_path }}/src/themes/custom /home/{{ user_name }}/releases/$TAG/web/themes/
-# Copy the composer.json
-cp -f {{ project_path }}/conf/drupal/composer.json /home/{{ user_name }}/releases/$TAG/
-# Copy the local settings and services files
-cp -f {{ project_path }}/conf/drupal/default/settings.local.php /home/{{ user_name }}/releases/$TAG/web/sites/default/
-cp -f {{ project_path }}/conf/drupal/default/local.services.yml /home/{{ user_name }}/releases/$TAG/web/sites/default/
+echo "Delivered with success."

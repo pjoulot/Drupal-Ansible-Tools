@@ -10,9 +10,6 @@ UPDATE_CONF=0
 ########## General variables ##########
 SYSTEM="{{ ansible_os_family }}"
 USER="{{ user_name }}"
-GROUP=10000
-
-
 
 ########## Drupal variables ##########
 DRUPAL_PROFIL="{{ drupal_profile }}"

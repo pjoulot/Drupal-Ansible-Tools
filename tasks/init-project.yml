@@ -84,20 +84,8 @@
 - name: fix-perms script
   template: src=templates/drupal/scripts/fix-perms.sh dest={{ project_path }}/scripts/fix-perms.sh
 
-- name: rebuild script
-  template: src=templates/drupal/scripts/rebuild.sh dest={{ project_path }}/scripts/rebuild.sh
-
-- name: update script
-  template: src=templates/drupal/scripts/update.sh dest={{ project_path }}/scripts/update.sh
-
 - name: deliver script
   template: src=templates/drupal/scripts/deliver.sh dest={{ project_path }}/scripts/deliver.sh
-
-- name: Add exectution rights rebuild.sh
-  file: path={{ project_path }}/scripts/rebuild.sh mode=0774
-
-- name: Add exectution rights update.sh
-  file: path={{ project_path }}/scripts/update.sh mode=0774
 
 - name: Add exectution rights fix-perms.sh
   file: path={{ project_path }}/scripts/fix-perms.sh mode=0774
