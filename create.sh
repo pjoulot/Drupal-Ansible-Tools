@@ -111,3 +111,6 @@ if [ ! -d "/home/$CURRENT_USER/lxc/$DOMAIN" ]; then
   sudo lxc-stop -n $DOMAIN
   sudo lxc-start -n $DOMAIN
 fi
+
+# Need to rebuild the permissions due to the copy and the lxc mount
+ssh root@$URL "bash /home/$USER_NAME/$DOMAIN/scripts/fix-perms.sh"
