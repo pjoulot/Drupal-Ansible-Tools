@@ -72,7 +72,7 @@
 ###################
 - name: Install Redis-server
   apt: name=redis-server state=present
-  when: redis-required is defined
+  when: redis_required is defined
 
 ###################
 # Varnish

@@ -2,7 +2,7 @@
 # Install nginx
 ###################
 - name: Install nginx
-  apt: nginx state=present update_cache=true
+  apt: name=nginx state=present update_cache=true
 - name: Setup the nginx configuration
   template: src=templates/drupal/conf/nginx/default dest={{ project_path }}/conf/nginx/default
 - name: Remove default nginx config
