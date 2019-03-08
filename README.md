@@ -12,7 +12,7 @@ Broken functionality [needs work]:
 
 Requirements:
 
-- sudo apt-get install lxc ansible
+- sudo apt-get install lxc lxc-templates ansible
 - You must have your ssh key into your authorized_keys file in your home directory in order to connect automatically to the LXC container.
 
 How to use:
