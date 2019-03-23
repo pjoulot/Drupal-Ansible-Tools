@@ -37,7 +37,7 @@
   command: mysql -u root {{ project }} -e "GRANT ALL PRIVILEGES ON {{ project }}.* TO '{{ project }}'@'localhost' IDENTIFIED BY '{{ project }}';"
 
 - name: install website
-  command: drush  site-install {{ drupal_profile }} --root=/var/www/{{ project }}/web --db-su="root" --db-su-pw="" --account-name=admin --account-pass=admin --db-url=mysql://{{ project }}:{{ project }}@localhost:3306/{{ project }} -y
+  command: drush  site-install {{ drupal_profile }} --root=/var/www/{{ project }}/web --db-su="root" --db-su-pw="" --account-name=admin --account-pass=admin --db-url=mysql://{{ project }}:{{ project }}@localhost:3306/{{ project }} --site-name={{ project }} -y
 
 - name: Include the local settings file 
   lineinfile:
