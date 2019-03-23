@@ -27,6 +27,15 @@
 - name: Add write rights on settings.php for installation
   file: path=/var/www/{{ project }}/web/sites/default/settings.php mode=0776
 
+- name: Create database
+  command: mysql -u root -e "CREATE DATABASE {{ project }} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+- name: Create mysql user
+  command: mysql -u root {{ project }} -e "CREATE USER {{ project }}@localhost IDENTIFIED BY '{{ project }}';"
+
+- name: Give access user
+  command: mysql -u root {{ project }} -e "GRANT ALL PRIVILEGES ON {{ project }}.* TO '{{ project }}'@'localhost' IDENTIFIED BY '{{ project }}';"
+
 - name: install website
   command: drush  site-install {{ drupal_profile }} --root=/var/www/{{ project }}/web --db-su="root" --db-su-pw="" --account-name=admin --account-pass=admin --db-url=mysql://{{ project }}:{{ project }}@localhost:3306/{{ project }} -y
 

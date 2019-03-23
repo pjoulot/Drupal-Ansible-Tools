@@ -106,7 +106,7 @@ if [ ! -d "/home/$CURRENT_USER/lxc" ]; then
   mkdir /home/$CURRENT_USER/lxc
 fi
 if [ ! -d "/home/$CURRENT_USER/lxc/$DOMAIN" ]; then
-  scp -r root@$URL:/home/$USER_NAME/$DOMAIN /home/$CURRENT_USER/lxc/
+  scp -r root@$URL:/home/$USER_NAME/$DOMAIN /home/$CURRENT_USER/lxc/ > /dev/null
   sudo sh -c "echo \"lxc.mount.entry = /home/$CURRENT_USER/lxc/$DOMAIN /var/lib/lxc/$DOMAIN/rootfs/home/$USER_NAME/$DOMAIN none bind 0 0\" >> /var/lib/lxc/$DOMAIN/config"
   sudo lxc-stop -n $DOMAIN
   sudo lxc-start -n $DOMAIN
